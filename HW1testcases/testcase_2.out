@@ -1,0 +1,135 @@
+1:/* 
+2: * Testcase_2
+3: *
+4: 
+5: */
+6:
+#key:int
+#id:main
+#punc:(
+#key:void
+#punc:)
+7:int main(void)
+#punc:{
+8:{
+9:#pragma token off
+10:    char a = 'a';
+11:    double b = 0.01;
+12:    int i = 1;
+13:    int c[2];
+14:
+15:    for (i = 0; i < 2; i++) {
+16:        c[i] = i;
+17:    }
+18:
+19:#pragma token on
+#key:printf
+#punc:(
+#string:c[1]=%d\n
+#punc:,
+#id:c
+#punc:[
+#integer:1
+#punc:]
+#punc:)
+#punc:;
+20:    printf("c[1]=%d\n", c[1]);
+#key:if
+#punc:(
+#id:c
+#punc:[
+#integer:0
+#punc:]
+#op:>
+#integer:1
+#op:&&
+#id:i
+#op:!=
+#integer:0
+#punc:)
+#punc:{
+21:    if (c[0] > 1 && i != 0) {
+#id:b
+#op:=
+#id:b
+#op:*
+#sci:100.1e+1
+#punc:;
+22:        b = b * 100.1e+1;
+#key:char
+#id:d
+#punc:[
+#integer:3
+#punc:]
+#op:=
+#string:XD
+#punc:;
+23:        char d[3] = "XD";
+#punc:}
+24:    } 
+#key:else
+#punc:{
+25:    else {
+#id:c
+#punc:[
+#integer:0
+#punc:]
+#op:=
+#char:'X'
+#punc:;
+26:        c[0] = 'X';
+#punc:}
+27:    }
+28:
+#key:switch
+#punc:(
+#id:a
+#punc:)
+#punc:{
+29:    switch(a) {
+#key:case
+#char:'a'
+#punc::
+30:        case 'a':
+#id:a
+#op:=
+#char:'b'
+#punc:;
+31:            a = 'b';
+#key:break
+#punc:;
+32:            break;
+#key:case
+#char:'b'
+#punc::
+33:        case 'b':
+#id:a
+#op:=
+#char:'c'
+#punc:;
+34:            a = 'c';
+#key:break
+#punc:;
+35:            break;
+#key:default
+#punc::
+36:        default:
+#key:break
+#punc:;
+37:            break;
+#punc:}
+38:    }
+39:
+#key:printf
+#punc:(
+#string:This is a string constant
+#punc:)
+#punc:;
+40:    printf("This is a string constant");
+41:    
+#key:return
+#integer:0
+#punc:;
+42:    return 0;
+#punc:}
+43:}

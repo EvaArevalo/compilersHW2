@@ -1,0 +1,16 @@
+int main() {
+
+    int c[2];
+    for (a = 0; i < 2; i++) {
+            c[i] = i;
+        }
+
+    printf("c[1]=%d\n", c[1]);
+    if (c[0] > 1)[{
+            b = b * 99.0e-10;
+        }
+        
+    b = 12 + 12.3E-ss + 24;
+    return 0;
+
+}

@@ -1,0 +1,165 @@
+1:/*
+2: * Testcase_3
+3: *
+4: *
+5: */
+6:
+#key:int
+#id:afunc
+#punc:(
+#key:int
+#op:*
+#id:p
+#punc:)
+7:int afunc(int *p)
+#punc:{
+8:{
+#key:printf
+#punc:(
+#string:afunc result
+#punc:)
+#punc:;
+9:    printf("afunc result");
+#punc:}
+10:}
+11:
+#key:int
+#id:bfunc
+#punc:(
+#key:int
+#op:*
+#id:p
+#punc:)
+12:int bfunc(int *p)
+#punc:{
+13:{
+#key:printf
+#punc:(
+#string:+++bfunc result---
+#punc:)
+#punc:;
+14:    printf("+++bfunc result---");
+#punc:}
+15:}
+16:
+#key:int
+#id:main
+#punc:(
+#key:void
+#punc:)
+17:int main(void)
+#punc:{
+18:{
+19:#pragma token off
+20:    const int a = 123;
+21:    int point = 1;
+22:    bool flag = true;
+23:    char b = 'X';
+24:
+25:#pragma token on
+26:
+#key:switch
+#punc:(
+#id:b
+#punc:)
+#punc:{
+27:    switch(b) {
+#key:case
+#char:'X'
+#punc::
+28:        case 'X':
+#id:afunc
+#punc:(
+#op:&
+#id:point
+#punc:)
+#punc:;
+29:            afunc(&point);
+#key:break
+#punc:;
+30:            break;
+#key:case
+#char:'b'
+#punc::
+31:        case 'b':
+#id:bfunc
+#punc:(
+#op:&
+#id:point
+#punc:)
+#punc:;
+32:            bfunc(&point);
+#key:break
+#punc:;
+33:            break;
+#key:case
+#char:'c'
+#punc::
+34:        case 'c':
+#id:flag
+#op:=
+#key:false
+#punc:;
+35:            flag = false;
+#key:default
+#punc::
+36:        default:
+#key:break
+#punc:;
+37:            break;
+#punc:}
+38:    }
+39:
+#id:ADD
+#punc::
+#key:do
+#punc:{
+40:ADD:do {
+#key:if
+#punc:(
+#id:a
+#op:==
+#integer:123
+#punc:)
+#punc:{
+41:        if (a == 123) {
+#id:a
+#op:=
+#id:a
+#op:+
+#punc:(
+#id:point
+#op:*
+#integer:5
+#punc:)
+#op:-
+#id:a
+#punc:;
+42:            a = a + (point * 5) - a;
+#id:goto
+#id:ADD
+#punc:;
+43:            goto ADD;
+#punc:}
+44:        }
+#punc:}
+#key:while
+#punc:(
+#id:flag
+#punc:)
+#punc:;
+45:    } while (flag);
+46:
+#key:printf
+#punc:(
+#string:This is a string constant
+#punc:)
+#punc:;
+47:    printf("This is a string constant");
+48:
+#key:return
+#integer:0
+#punc:;
+49:    return 0;
+#punc:}
+50:}

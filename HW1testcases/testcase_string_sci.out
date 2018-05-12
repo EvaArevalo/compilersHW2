@@ -1,0 +1,10 @@
+#sci:54.5E+4
+1:54.5E+4
+#sci:5e-4
+2:5e-4
+#string:It's supercalifragilisticexpialidocious\n
+3:"It's supercalifragilisticexpialidocious\n"
+#string:Even though the sound of it is something quite atrocious
+4:"Even though the sound of it is something quite atrocious"
+#string:Do you know the sequel is coming this Christmas? Yeah, after %d years
+5:"Do you know the sequel is coming this Christmas? Yeah, after %d years"
