@@ -1,3 +1,9 @@
+%{
+#include <stdio.h>
+int yylex();
+void yyerror(const char* msg);
+%}
+
 %token IDENTIFIER NUMBER_SCI NUMBER_DOUBLE NUMBER_INTEGER CHARACTER
 %token VOID INT DOUBLE BOOL CHAR NULL FOR WHILE DO IF ELSE SWITCH RETURN BREAK 
 %token CONTINUE CONST TRUE FALSE STRUCT CASE DEFAULT
@@ -369,8 +375,33 @@ literal_constant
 	; 
 
 %% 
-int main(){
+
+extern int linenum;
+extern int yytext[];
+extern char** lineContents;
+extern void freeLineContents();
+
+int main(int argc, char*argv[]){
+  ++argv;
+  --argc;	/*skip over program name*/
+
+  if (0<argc){
+  	yyin = fopen(argv[0], "r");
+  } else {
+  	yyin=stdin;
+  }
+ 
 	yyparse();
 	printf("No Syntax error!\n")
+	freeLineContents();
 	return 0;
+}
+
+int yyerror( char *msg ) {
+	freeLineContents();
+	fprintf( stderr, "*** Error at line %d: %s\n", linenum, lineContents );
+	fprintf( stderr, "\n" );
+	fprintf( stderr, "Unmatched token: %s\n", yytext );
+	fprintf( stderr, "*** syntax error\n");
+	exit(-1);
 }

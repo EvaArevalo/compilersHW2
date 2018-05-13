@@ -3,12 +3,16 @@
 
 CC=gcc
 LEX=flex
+PARS=byacc
 
-scanner: lex.yy.c
-		$(CC) -o $@ $(LDFLAGS) $^
+parser: lex.yy.c y.tab.c
+		$(CC) -o parser lex.yy.c y.tab.c
+
+y.tab.c: parser.y
+		 $(PARS) -d parser.y
 
 lex.yy.c: scanner.l
-		$(LEX) $(LFLAGS) -o $@ $^
+		$(LEX) scanner.l
 
 clean:
-		$(RM) *.o scanner.o lex.yy.c
+		$(RM) *.o scanner.o lex.yy.c y.tab.c

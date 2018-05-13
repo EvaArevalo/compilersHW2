@@ -1,5 +1,5 @@
 %{
-//#include "y.tab.h"
+#include "y.tab.h"
 #include <stdio.h>
 
 int	printTokenOn=1;
@@ -7,7 +7,7 @@ int	printSourceOn=1;
 int 	lineCount=0;
 int	wordCount=0;
 int 	numStrings = 5;
-char	**lineContents = NULL;
+char	**lineContents = (char**)malloc(sizeof(char*)*numStrings); 
 FILE*	f;
 
 void addWordToLine();
@@ -174,30 +174,6 @@ ffprintf	{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); retu
 
 
 %%
-
-/*-----------------------
-main() set yyin() as the argument passed on command line and
-outputs to file "tokens", calls lexer, closes and  cleans up 
-------------------------*/
-int main(int argc, char*argv[]){
-  ++argv;
-  --argc;	/*skip over program name*/
-
-  if (0<argc){
-  	yyin = fopen(argv[0], "r");
-  } else {
-  	yyin=stdin;
-  }
-  
-  //f = fopen("tokens","w");
-  //f = fopen("tokens","w");
-
-  lineContents = (char**)malloc(sizeof(char*)*numStrings);  
-  yylex();
-  //fclose(f);
-  freeLineContents();
-  return 0;
-} 
 
 /*-----------------------
 addWordToLine() Adds word to line, dynamically allocates more space if 
