@@ -7,14 +7,14 @@ int	printSourceOn=1;
 int 	lineCount=0;
 int	wordCount=0;
 int 	numStrings = 5;
-char	**lineContents = (char**)malloc(sizeof(char*)*numStrings); 
+char	**lineContents = NULL; 
 FILE*	f;
 
 void addWordToLine();
 void endOfLine();
 void comment();
 int yywrap();
-void yyerror();
+void lexerError();
 void freeLineContents();
 
 %}
@@ -53,7 +53,7 @@ Pragma	    [#]
 <PRAGMA>\n			{endOfLine(); BEGIN(INITIAL);}
 
 <ERROR>.			{addWordToLine();}
-<ERROR>\n			{yyerror(); BEGIN(INITIAL);}
+<ERROR>\n			{lexerError(); BEGIN(INITIAL);}
 
 
 "/*"				{addWordToLine(); BEGIN(MULTICOMMENT);}
@@ -72,7 +72,7 @@ int			{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return 
 double   	{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return DOUBLE;}
 bool   		{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return BOOL;}
 char   		{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return CHAR;}
-null   		{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return NULL;}
+null   		{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return K_NULL;}
 for   		{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return FOR;}
 while   	{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return WHILE;}
 do   		{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); return DO;}
@@ -146,10 +146,10 @@ ffprintf	{if(printTokenOn==1) printf("#key:%s\n",yytext);  addWordToLine(); retu
 "/="			{if(printTokenOn==1) printf("#assign:%s\n",yytext);  addWordToLine(); return DIV_ASSIGN;}
 
 {Whitespace}	{addWordToLine();}
-{Operator}		{if(printTokenOn==1) printf("#op:%s\n",yytext);  addWordToLine(); return yytext;}
-{Punctuation}		{if(printTokenOn==1) printf("#punc:%s\n",yytext);  addWordToLine(); return yytext;}
+{Operator}		{if(printTokenOn==1) printf("#op:%s\n",yytext);  addWordToLine(); return *yytext;}
+{Punctuation}		{if(printTokenOn==1) printf("#punc:%s\n",yytext);  addWordToLine(); return *yytext;}
 {Scidouble}		{if(printTokenOn==1) printf("#sci:%s\n",yytext);  addWordToLine(); return NUMBER_SCI;}
-{Sciint}		{if(printTokenOn==1) printf("#sci:%s\n",yytext);  addWordToLine(); return nUMBER_SCI;}
+{Sciint}		{if(printTokenOn==1) printf("#sci:%s\n",yytext);  addWordToLine(); return NUMBER_SCI;}
 {Double}		{if(printTokenOn==1) printf("#double:%s\n",yytext);  addWordToLine(); return NUMBER_DOUBLE;}
 {Integer}		{if(printTokenOn==1) printf("#integer:%s\n",yytext);  addWordToLine(); return NUMBER_INTEGER;}
 {Char}			{if(printTokenOn==1) printf("#char:%s\n",yytext);  addWordToLine(); return CHARACTER;}
@@ -215,9 +215,9 @@ int yywrap(){
 }
 
 /*-----------------------
-yyerror() Prints error to stderr  
+lexerError() Prints error to stderr  
 ------------------------*/
-void yyerror(char *message){
+void lexerError(char *message){
 	fprintf(stderr, "Error at line %d: ",lineCount+1);
 	int j;
 	for(j=0;j<wordCount;j++)
