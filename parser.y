@@ -50,14 +50,12 @@ declaration_const
 	;
 
 declaration_specifiers_const
-	: CONST scalar_type_specifier
+	: type_qualifier scalar_type_specifier
 	;
 
-//type_specifier
-//	: VOID
-//	| scalar_type_specifier
-//	| structured_type
-//	;
+type_qualifier
+	: CONST
+	;
 
 scalar_type_specifier
 	: INT 
@@ -66,13 +64,9 @@ scalar_type_specifier
 	| CHAR
 	;
 
-//structured_type
-//	: Array
-//	;
-
 init_declarator_list_const
 	: init_declarator_const
-	| init_declarator_list_const ';' init_declarator_const
+	| init_declarator_list_const ',' init_declarator_const
 	;
 
 init_declarator_const
@@ -81,11 +75,15 @@ init_declarator_const
 	;
 
 declarator_const
+	: direct_declarator_const
+	;
+
+direct_declarator_const
 	: IDENTIFIER
 	| '(' declarator_const ')'
-	| declarator_const '(' ')'
-	| declarator_const '(' parameter_list ')'
-	| declarator_const '(' identifier_list ')'
+	| direct_declarator_const '(' ')'
+	| direct_declarator_const '(' parameter_list ')'
+	| direct_declarator_const '(' identifier_list ')'
 	;
 
 declaration_no_const
@@ -107,11 +105,15 @@ init_declarator_no_const
 	;
 
 declarator_no_const
+	: direct_declarator_no_const
+	;
+
+direct_declarator_no_const
 	: IDENTIFIER
 	| '(' declarator_no_const ')'
-	| declarator_no_const '(' ')'
-	| declarator_no_const '(' parameter_list ')'
-	| declarator_no_const '(' identifier_list ')'
+	| direct_declarator_no_const '(' ')'
+	| direct_declarator_no_const '(' parameter_list ')'
+	| direct_declarator_no_const '(' identifier_list ')'
 	;
 
 function_definition
@@ -122,17 +124,21 @@ function_definition
 	;
 
 initializer
-	: '(' ')'
-	| '(' initializer_list ')'
-	| '(' initializer_list , ')'
+	: '{' '}'
+	| '{' initializer_list '}'
+	| '{' initializer_list ',' '}'
 	| assignment_expression_no_func
 	;
 
 initializer_list
-	: designator_list '=' initializer
+	: designation  initializer
 	| initializer
-	| initializer_list ',' designator_list '=' initializer
+	| initializer_list ',' designation
 	| initializer_list ',' initializer
+	;
+
+designation
+	: designator_list '='
 	;
 
 designator_list
@@ -164,9 +170,6 @@ compound_statement
 	| '{' block_item_list '}'
 	;
 
-	'{' block_item_list '}'
-	;
-
 block_item_list
 	: global_declarations statement_group
 	;
@@ -177,18 +180,11 @@ statement_group
 	;
 
 statement
-	: labeled_statement
-	| compound_statement
+	: compound_statement
 	| expression_statement
 	| selection_statement
 	| iteration_statement
 	| jump_statement
-	;
-
-labeled_statement
-	: IDENTIFIER ':' statement
-	| CASE assignment_expression ':' statement
-	| DEFAULT ':' statement
 	;
 
 jump_statement
@@ -205,7 +201,25 @@ expression_statement
 selection_statement
 	: IF '(' expression ')' statement
 	| IF '(' expression ')' statement ELSE statement
-	| SWITCH '(' expression ')' statement;
+	| SWITCH '(' identifier_list ')' '{'switch_statement'}';
+
+switch_statement
+	: case_group
+	| case_group default_statement
+	;
+
+case_group
+	: CASE literal_constant ':' statement_group
+	;
+
+default_statement
+	: DEFAULT ':' statement_group
+	;
+
+literal_constant
+	: NUMBER_INTEGER
+	| CHAR
+	;
 
 iteration_statement
 	: WHILE '(' expression ')' statement
@@ -337,7 +351,7 @@ postfix_expression_no_func
 
 primary_expression_no_func
 	: IDENTIFIER
-	| literal_constant
+	| constant
 	| STRING
 	| '(' expression ')'
 	;
@@ -367,12 +381,12 @@ argument_expression_list
 
 primary_expression
 	: IDENTIFIER
-	| literal_constant
+	| constant
 	| STRING
 	| '(' expression ')'
 	;
 
-literal_constant
+constant
 	: NUMBER_INTEGER
 	| NUMBER_DOUBLE
 	| NUMBER_SCI
