@@ -82,10 +82,10 @@ init_declarator_const
 
 declarator_const
 	: IDENTIFIER
-	| '(' declarator ')'
-	| declarator '(' ')'
-	| declarator '(' parameter_list ')'
-	| declarator '(' identifier_list ')'
+	| '(' declarator_const ')'
+	| declarator_const '(' ')'
+	| declarator_const '(' parameter_list ')'
+	| declarator_const '(' identifier_list ')'
 	;
 
 declaration_no_const
@@ -146,7 +146,7 @@ designator
 
 parameter_list
 	: parameter_declaration
-	| paramenter_list ',' parameter_declaration
+	| parameter_list ',' parameter_declaration
 	;
 
 parameter_declaration
@@ -161,9 +161,7 @@ identifier_list
 
 compound_statement
 	: '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
+	| '{' block_item_list '}'
 	;
 
 	'{' block_item_list '}'
@@ -184,13 +182,20 @@ statement
 	| expression_statement
 	| selection_statement
 	| iteration_statement
+	| jump_statement
 	;
 
 labeled_statement
 	: IDENTIFIER ':' statement
-	| CASE constant_expression ':' statement
+	| CASE assignment_expression ':' statement
 	| DEFAULT ':' statement
 	;
+
+jump_statement
+	: CONTINUE ';'
+	| BREAK ';'
+	| RETURN ';'
+	| RETURN expression ';'
 
 expression_statement
 	: ';'
@@ -401,13 +406,4 @@ int main(int argc, char*argv[]){
 	printf("No Syntax error!\n");
 	freeLineContents();
 	return 0;
-}
-
-int yyerror( char *msg ) {
-	freeLineContents();
-	fprintf( stderr, "*** Error at line %d: %s\n", lineCount, lineContents[wordCount] );
-	fprintf( stderr, "\n" );
-	fprintf( stderr, "Unmatched token: %s\n", lineContents[wordCount] );
-	fprintf( stderr, "*** syntax error\n");
-	exit(1);
 }

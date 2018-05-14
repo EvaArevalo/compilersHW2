@@ -225,7 +225,6 @@ void lexerError(char *message){
 	fprintf(stderr,"\n");
 	//free and reallocate, reset vars
 	freeLineContents();
-	lineContents = (char**) malloc(sizeof(char*) * numStrings);
 	exit(1);
 }
 
@@ -242,3 +241,15 @@ void freeLineContents(){
 	wordCount=0;
 }
 
+void yyerror(const char *msg ) {	
+	fprintf( stderr, "*** Error at line %d:", lineCount+1);
+	int j;
+	for(j=0;j<wordCount;j++)
+		fprintf(stderr,"%s",lineContents[j]);
+	fprintf(stderr,"\n");
+	fprintf( stderr, "\n" );
+	fprintf( stderr, "Unmatched token: %s\n", yytext );
+	fprintf( stderr, "*** syntax error\n");	
+	freeLineContents();
+	exit(-1);
+}
