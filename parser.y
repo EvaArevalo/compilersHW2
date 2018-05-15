@@ -50,11 +50,7 @@ declaration_const
 	;
 
 declaration_specifiers_const
-	: type_qualifier scalar_type_specifier
-	;
-
-type_qualifier
-	: CONST
+	: CONST scalar_type_specifier
 	;
 
 scalar_type_specifier
@@ -212,10 +208,6 @@ selection_statement
 	| SWITCH '(' expression ')' statement
 	;
 
-literal_constant
-	: NUMBER_INTEGER
-	| CHAR
-	;
 
 iteration_statement
 	: WHILE '(' expression ')' statement
