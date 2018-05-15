@@ -15,7 +15,7 @@ int yyerror(char* msg);
 %token ADD_ASSIGN SUB_ASSIGN DIV_ASSIGN MUL_ASSIGN
 %token INVALIDNUM
 
-/*%nonassoc ELSE*/
+%nonassoc ELSE LOWER_THAN_ELSE
 
 %start valid_structure
 %%
@@ -203,7 +203,7 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' statement
+	: IF '(' expression ')' statement %prec LOWER_THAN_ELSE
 	| IF '(' expression ')' statement ELSE statement
 	| SWITCH '(' expression ')' statement
 	;
