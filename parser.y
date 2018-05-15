@@ -15,7 +15,7 @@ int yyerror(char* msg);
 %token ADD_ASSIGN SUB_ASSIGN DIV_ASSIGN MUL_ASSIGN
 %token INVALIDNUM
 
-%nonassoc ELSE LOWER_THAN_ELSE
+%nonassoc LOWER_THAN_ELSE
 
 %start valid_structure
 %%
@@ -109,6 +109,8 @@ direct_declarator_no_const
 	: IDENTIFIER
 	| '(' declarator_no_const ')'
 	| direct_declarator_no_const '(' ')'
+	| direct_declarator_no_const '[' ']'
+	| direct_declarator_no_const '[' logical_or_expression_no_func']'
 	| direct_declarator_no_const '(' parameter_list ')'
 	| direct_declarator_no_const '(' identifier_list ')'
 	;
@@ -357,7 +359,6 @@ postfix_expression
 	| postfix_expression '(' ')'
 	| postfix_expression '(' argument_expression_list ')'
 	| postfix_expression '.' IDENTIFIER
-	| postfix_expression POINTER_OP IDENTIFIER
 	| postfix_expression INC_OP
 	| postfix_expression DEC_OP
 	;

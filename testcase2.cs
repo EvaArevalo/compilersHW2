@@ -1,13 +1,17 @@
 
 int a;
 int b;
+double c[]={100.0,600.0,500.0};
+double d[5]={100.0,600.0,500.0};
+double e[5][4][3];
+const double blabla=1.1;
 
 int main()
 {
    int i=0;
    int j;
    int k;
-   const double blabla=1.1;
+   c[1]=10.0;
 
    //test ifs
    if(i>3){
@@ -26,28 +30,29 @@ int main()
 
    while(i!=5){
 	int froufrou=i*3;
-//	switch (froufrou){
-//	  case 1:
-//		i=1;
-//		break;
-//	  case 2:
-//		i=2;
-//		break;
-//	  default:
-//		i=7;
-//	}
+	switch (froufrou){
+	  case 1:
+		i=1;
+		break;
+	  case 2:
+		i=2;
+		break;
+	  default:
+		i=7;
+	}
    }
 
-//  switch (froufrou){
-//	case 'a':
-//	 i=1;
-//	 break;
-//	case 'b':
-//	 i=2;
-//	 break;
-//	default:
-//	 i=7;
-//  }
+  switch (froufrou){
+	case 'a':
+	 i=1;
+	 break;
+	case 'b':
+	 i=2;
+	 break;
+	default:
+	 i=7;
+  }
+
    //test fors
    for(;;){
      i--;
@@ -64,6 +69,12 @@ int main()
    a = k % j;
    a = a--;
    
+   blabla(1,1.1,'c');
    
    return 0;
+}
+
+double blabla(int para1,double para2,char para3){
+   para1=para2&&para3;
+   para1=para1||para2;
 }

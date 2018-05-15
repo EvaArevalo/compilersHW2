@@ -9,7 +9,7 @@ parser: lex.yy.c y.tab.c
 		$(CC) -o parser lex.yy.c y.tab.c
 
 y.tab.c: parser.y
-		 $(PARS) -d parser.y
+		 $(PARS) -d --verbose parser.y
 
 lex.yy.c: scanner.l
 		$(LEX) scanner.l
