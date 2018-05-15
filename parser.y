@@ -16,6 +16,7 @@ int yyerror(char* msg);
 %token INVALIDNUM
 
 %nonassoc ELSE_DUMMY_FOR_CONFLICT
+%nonassoc ELSE
 
 %start valid_structure
 %%
@@ -165,8 +166,7 @@ identifier_list
 	;
 
 compound_statement
-	: '{' '}'
-	| '{' statements_within_function '}'
+	: '{' statements_within_function '}'
 	;
 
 statements_within_function
