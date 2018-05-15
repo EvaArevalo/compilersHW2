@@ -81,7 +81,8 @@ declarator_const
 direct_declarator_const
 	: IDENTIFIER
 	| '(' declarator_const ')'
-	| direct_declarator_const '(' ')'
+	| direct_declarator_const '[' ']'
+	| direct_declarator_const '[' logical_or_expression']'
 	| direct_declarator_const '(' parameter_list ')'
 	| direct_declarator_const '(' identifier_list ')'
 	;
@@ -184,7 +185,14 @@ statement
 	| expression_statement
 	| selection_statement
 	| iteration_statement
+	| labeled_statement
 	| jump_statement
+	;
+
+labeled_statement
+	: IDENTIFIER ':' statement
+	| CASE logical_or_expression ':' statement
+	| DEFAULT ':' statement
 	;
 
 jump_statement
@@ -201,19 +209,7 @@ expression_statement
 selection_statement
 	: IF '(' expression ')' statement
 	| IF '(' expression ')' statement ELSE statement
-	| SWITCH '(' identifier_list ')' '{'switch_statement'}';
-
-switch_statement
-	: case_group
-	| case_group default_statement
-	;
-
-case_group
-	: CASE literal_constant ':' statement_group
-	;
-
-default_statement
-	: DEFAULT ':' statement_group
+	| SWITCH '(' expression ')' statement
 	;
 
 literal_constant
