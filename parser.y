@@ -15,7 +15,7 @@ int yyerror(char* msg);
 %token ADD_ASSIGN SUB_ASSIGN DIV_ASSIGN MUL_ASSIGN
 %token INVALIDNUM
 
-%nonassoc LOWER_THAN_ELSE
+%nonassoc ELSE_DUMMY_FOR_CONFLICT
 
 %start valid_structure
 %%
@@ -40,8 +40,8 @@ declaration_list
 	;
 
 declaration
-	: declaration_const /* vars */
-	| declaration_no_const /* array */
+	: declaration_const 
+	| declaration_array 
 	;
 
 declaration_const
@@ -83,60 +83,60 @@ direct_declarator_const
 	| direct_declarator_const '(' identifier_list ')'
 	;
 
-declaration_no_const
-	: declaration_specifiers_no_const ';'
-	| declaration_specifiers_no_const init_declarator_list_no_const ';'
+declaration_array
+	: declaration_specifiers_array ';'
+	| declaration_specifiers_array init_declarator_list_array ';'
 	;
 
-declaration_specifiers_no_const
+declaration_specifiers_array
 	: scalar_type_specifier
-	| scalar_type_specifier declaration_specifiers_no_const
+	| scalar_type_specifier declaration_specifiers_array
 
-init_declarator_list_no_const
-	: init_declarator_no_const
-	| init_declarator_list_no_const ',' init_declarator_no_const
+init_declarator_list_array
+	: init_declarator_array
+	| init_declarator_list_array ',' init_declarator_array
 
-init_declarator_no_const
-	: declarator_no_const '=' initializer
-	| declarator_no_const
+init_declarator_array
+	: declarator_array '=' initializer
+	| declarator_array
 	;
 
-declarator_no_const
-	: direct_declarator_no_const
+declarator_array
+	: direct_declarator_array
 	;
 
-direct_declarator_no_const
+direct_declarator_array
 	: IDENTIFIER
-	| '(' declarator_no_const ')'
-	| direct_declarator_no_const '(' ')'
-	| direct_declarator_no_const '[' ']'
-	| direct_declarator_no_const '[' logical_or_expression_no_func']'
-	| direct_declarator_no_const '(' parameter_list ')'
-	| direct_declarator_no_const '(' identifier_list ')'
+	| '(' declarator_array ')'
+	| direct_declarator_array '(' ')'
+	| direct_declarator_array '[' ']'
+	| direct_declarator_array '[' logical_or_expression_no_function']'
+	| direct_declarator_array '(' parameter_list ')'
+	| direct_declarator_array '(' identifier_list ')'
 	;
 
 function_definition
-	: declaration_specifiers_no_const declarator_no_const declaration_list compound_statement
-	| declaration_specifiers_no_const declarator_no_const compound_statement
-	| VOID declarator_no_const declaration_list compound_statement
-	| VOID declarator_no_const compound_statement
+	: declaration_specifiers_array declarator_array declaration_list compound_statement
+	| declaration_specifiers_array declarator_array compound_statement
+	| VOID declarator_array declaration_list compound_statement
+	| VOID declarator_array compound_statement
 	;
 
 initializer
 	: '{' '}'
 	| '{' initializer_list '}'
 	| '{' initializer_list ',' '}'
-	| assignment_expression_no_func
+	| assignment_expression_no_function
 	;
 
 initializer_list
-	: designation  initializer
+	: designator_list_and_equal_op  initializer
 	| initializer
-	| initializer_list ',' designation
+	| initializer_list ',' designator_list_and_equal_op
 	| initializer_list ',' initializer
 	;
 
-designation
+designator_list_and_equal_op
 	: designator_list '='
 	;
 
@@ -155,8 +155,8 @@ parameter_list
 	;
 
 parameter_declaration
-	: declaration_specifiers_no_const declarator_no_const
-	| declaration_specifiers_no_const
+	: declaration_specifiers_array declarator_array
+	| declaration_specifiers_array
 	;
 
 identifier_list
@@ -166,10 +166,10 @@ identifier_list
 
 compound_statement
 	: '{' '}'
-	| '{' block_item_list '}'
+	| '{' statements_within_function '}'
 	;
 
-block_item_list
+statements_within_function
 	: global_declarations statement_group
 	;
 
@@ -205,11 +205,10 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' statement %prec LOWER_THAN_ELSE
+	: IF '(' expression ')' statement %prec ELSE_DUMMY_FOR_CONFLICT
 	| IF '(' expression ')' statement ELSE statement
 	| SWITCH '(' expression ')' statement
 	;
-
 
 iteration_statement
 	: WHILE '(' expression ')' statement
@@ -228,9 +227,9 @@ assignment_expression
 	| unary_expression '=' assignment_expression
 	;
 
-assignment_expression_no_func
-	: logical_or_expression_no_func
-	| unary_expression_no_func '=' assignment_expression_no_func
+assignment_expression_no_function
+	: logical_or_expression_no_function
+	| unary_expression_no_function '=' assignment_expression_no_function
 	;
 
 logical_or_expression
@@ -282,66 +281,66 @@ unary_expression
 	| unary_operator unary_expression
 	;
 
-logical_or_expression_no_func
-	: logical_and_expression_no_func
-	| logical_or_expression_no_func OR_OP logical_and_expression_no_func
+logical_or_expression_no_function
+	: logical_and_expression_no_function
+	| logical_or_expression_no_function OR_OP logical_and_expression_no_function
 	;
 
-logical_and_expression_no_func
-	: and_expression_no_func
-	| logical_and_expression_no_func AND_OP and_expression_no_func
+logical_and_expression_no_function
+	: and_expression_no_function
+	| logical_and_expression_no_function AND_OP and_expression_no_function
 	;
 
-and_expression_no_func
-	: equality_expression_no_func
-	| and_expression_no_func POINTER_OP equality_expression_no_func
+and_expression_no_function
+	: equality_expression_no_function
+	| and_expression_no_function POINTER_OP equality_expression_no_function
 	;
 
-equality_expression_no_func
-	: relational_expression_no_func
-	| equality_expression_no_func EQ_OP relational_expression_no_func
-	| equality_expression_no_func NE_OP relational_expression_no_func
+equality_expression_no_function
+	: relational_expression_no_function
+	| equality_expression_no_function EQ_OP relational_expression_no_function
+	| equality_expression_no_function NE_OP relational_expression_no_function
 	;
 
-relational_expression_no_func
-	: additive_expression_no_func
-	| relational_expression_no_func '>' additive_expression_no_func
-	| relational_expression_no_func '<' additive_expression_no_func
-	| relational_expression_no_func GE_OP additive_expression_no_func
-	| relational_expression_no_func LE_OP additive_expression_no_func
+relational_expression_no_function
+	: additive_expression_no_function
+	| relational_expression_no_function '>' additive_expression_no_function
+	| relational_expression_no_function '<' additive_expression_no_function
+	| relational_expression_no_function GE_OP additive_expression_no_function
+	| relational_expression_no_function LE_OP additive_expression_no_function
 	;
 
-additive_expression_no_func
-	: multiplicative_expression_no_func
-	| additive_expression_no_func '+' multiplicative_expression_no_func
-	| additive_expression_no_func '-' multiplicative_expression_no_func
+additive_expression_no_function
+	: multiplicative_expression_no_function
+	| additive_expression_no_function '+' multiplicative_expression_no_function
+	| additive_expression_no_function '-' multiplicative_expression_no_function
 	;
 
-multiplicative_expression_no_func
-	: unary_expression_no_func
-	| multiplicative_expression_no_func '*' unary_expression_no_func
-	| multiplicative_expression_no_func '/' unary_expression_no_func
-	| multiplicative_expression_no_func '%' unary_expression_no_func
+multiplicative_expression_no_function
+	: unary_expression_no_function
+	| multiplicative_expression_no_function '*' unary_expression_no_function
+	| multiplicative_expression_no_function '/' unary_expression_no_function
+	| multiplicative_expression_no_function '%' unary_expression_no_function
 	;
 
-unary_expression_no_func
-	: postfix_expression_no_func
-	| INC_OP unary_expression_no_func
-	| DEC_OP unary_expression_no_func
-	| unary_operator unary_expression_no_func
+unary_expression_no_function
+	: postfix_expression_no_function
+	| INC_OP unary_expression_no_function
+	| DEC_OP unary_expression_no_function
+	| unary_operator unary_expression_no_function
 	;
 
-postfix_expression_no_func
-	: primary_expression_no_func
-	| postfix_expression_no_func  '[' ']'
-	| postfix_expression_no_func '.' IDENTIFIER
-	| postfix_expression_no_func INC_OP
-	| postfix_expression_no_func DEC_OP
+postfix_expression_no_function
+	: primary_expression_no_function
+	| postfix_expression_no_function  '[' ']'
+	| postfix_expression_no_function '.' IDENTIFIER
+	| postfix_expression_no_function INC_OP
+	| postfix_expression_no_function DEC_OP
 	;
 
-primary_expression_no_func
+primary_expression_no_function
 	: IDENTIFIER
-	| constant
+	| number
 	| STRING
 	| '(' expression ')'
 	;
@@ -370,12 +369,12 @@ argument_expression_list
 
 primary_expression
 	: IDENTIFIER
-	| constant
+	| number
 	| STRING
 	| '(' expression ')'
 	;
 
-constant
+number
 	: NUMBER_INTEGER
 	| NUMBER_DOUBLE
 	| NUMBER_SCI
