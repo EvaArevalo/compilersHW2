@@ -242,7 +242,7 @@ void freeLineContents(){
 }
 
 void yyerror(const char *msg ) {	
-	fprintf( stderr, "*** Error at line %d:", lineCount+1);
+	fprintf( stderr, "*** Error at line %d: ", lineCount+1);
 	int j;
 	for(j=0;j<wordCount;j++)
 		fprintf(stderr,"%s",lineContents[j]);

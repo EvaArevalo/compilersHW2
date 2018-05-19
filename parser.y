@@ -405,7 +405,7 @@ int main(int argc, char*argv[]){
   }*/
  
 	yyparse();
-	printf("No Syntax error!\n");
+	printf("No syntax error!\n");
 	freeLineContents();
 	return 0;
 }
